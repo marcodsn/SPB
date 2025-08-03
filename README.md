@@ -80,11 +80,12 @@ The personas were generated using the following pipeline:
 ## Additional Information
 ### Code and Seed Data
 
-The generation script and seed data can be found at [github.com/marcodsn/SPB] (TBD).
+The generation script and seed data can be found on [GitHub](https://github.com/marcodsn/SPB/tree/2508).
 
 ### Licensing Information
 
 This dataset is licensed under the CC BY 4.0 License.
+The code used to generate the dataset is available under the Apache 2.0 License.
 
 ### Citation Information
 
