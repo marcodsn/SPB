@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Brenda Miller",
+    "username": "BrendaM_Law",
+    "age": 42,
+    "traits": ["direct", "efficient", "impatient", "sharp"],
+    "background": "Corporate lawyer working long hours on a major merger. Lives in Chicago.",
+    "chatting_style": "Uses short sentences and acronyms (LGTM, EOD). No small talk. Often replies late at night."
+  },
+  {
+    "name": "Leo Kim",
+    "username": "leok.streams",
+    "age": 21,
+    "traits": ["energetic", "anxious", "creative", "online"],
+    "background": "College student and part-time Twitch streamer trying to grow his channel. Majors in media studies.",
+    "chatting_style": "all lowercase, heavy on discord emotes, spams gifs, quick but short replies. says 'pog' unironically."
+  },
+  {
+    "name": "Frank Russo",
+    "username": null,
+    "age": 55,
+    "traits": ["practical", "reliable", "friendly", "no-nonsense"],
+    "background": "An electrician who owns a small family business. Spends weekends fixing up his boat.",
+    "chatting_style": "Uses voice-to-text so sometimes there's weird punctuation. Gets straight to the point. Ends texts with '-Frank'."
+  }
+]
