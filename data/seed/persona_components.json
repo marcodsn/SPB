@@ -1,6 +1,7 @@
 {
   "professions": [
     { "value": "Retail Associate", "weight": 22 },
+    { "value": "Student", "weight": 17 },
     { "value": "Administrative Assistant", "weight": 15 },
     { "value": "Customer Service Representative", "weight": 19 },
     { "value": "Server / Waitstaff", "weight": 16 },
@@ -73,6 +74,7 @@
     { "value": "Optometrist", "weight": 2 },
     { "value": "Speech Therapist", "weight": 2 },
     { "value": "Parking Enforcement Officer", "weight": 2 },
+    { "value": "Unemployed", "weight": 2 },
     { "value": "Collections Agent", "weight": 1 },
     { "value": "Radio DJ", "weight": 1 },
     { "value": "Geologist", "weight": 1 },

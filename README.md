@@ -2,9 +2,9 @@
 
 ## Dataset Summary
 
-This dataset contains around 6.000 synthetically generated, fictional character personas in a structured JSON format, with a focus on online-based conversational personas. Each persona includes a name, age, personality traits, a concise background story, and a described chatting style. An entry is added to idetify the model used to generate the persona.
+This dataset contains around 5.000 synthetically generated, fictional character personas in a structured JSON format, with a focus on online-based conversational personas. Each persona includes a name, age, personality traits, a concise background story, and a described chatting style. An entry is added to idetify the model used to generate the persona.
 
-The dataset was created programmatically using a large language model (specifically, for this iteration, we used `Qwen/Qwen3-30B-A3B-Instruct-2507`) guided by a detailed, component-based prompting strategy.
+The dataset was created programmatically using a large language model (specifically, for this iteration, we used [`Kimi-K2-Instruct`](https://huggingface.co/moonshotai/Kimi-K2-Instruct) and [`GLM-4.5-Air-FP8`](https://huggingface.co/zai-org/GLM-4.5-Air-FP8)) guided by a detailed, component-based prompting strategy.
 
 This dataset is designed for infering language models in tasks requiring character consistency, role-playing, and stylistic dialogue generation. It is the foundation of a coming dataset containing synthetic conversations between these personas.
 
@@ -76,6 +76,10 @@ The personas were generated using the following pipeline:
 
 - **Narrative Depth**: The background and chatting_style descriptions are intentionally brief. They provide a starting point but lack the depth of a fully developed character biography.
 - **Generation Patterns**: Despite efforts to ensure novelty, the generation process may fall into subtle patterns or tropes over 6,000 iterations.
+
+UPDATE: Here follows a list of improvements we plan to implement in the next iteration of this dataset:
+- **Extreme Personas**: Consistently negative or erratic emotional states, dysfunctional communication patterns, personas that are defined by their impairments or unusual thought processes, rather than just their coping mechanisms.
+- **Waaaaaay more seed components**: While we think our professions list is already quite good, we want to expand the list of life contexts, traits, and chatting quirks to allow for more diverse personas.
 
 ## Additional Information
 ### Code and Seed Data

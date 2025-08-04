@@ -67,15 +67,15 @@ def process_raw_data():
     total_personas_loaded = 0
 
     # Get all JSON files in the raw data directory
-    json_files = glob.glob(os.path.join(RAW_DATA_DIR, "*.json"))
+    jsonl_files = glob.glob(os.path.join(RAW_DATA_DIR, "*.jsonl"))
 
-    if not json_files:
-        print(f"No JSON files found in '{RAW_DATA_DIR}'. Exiting.")
+    if not jsonl_files:
+        print(f"No JSONL files found in '{RAW_DATA_DIR}'. Exiting.")
         return
 
-    print(f"Found {len(json_files)} JSON files to process in '{RAW_DATA_DIR}'.")
+    print(f"Found {len(jsonl_files)} JSONL files to process in '{RAW_DATA_DIR}'.")
 
-    for file_path in json_files:
+    for file_path in jsonl_files:
         total_files_processed += 1
         model_name = extract_model_name_from_filename(file_path)
 
@@ -85,7 +85,7 @@ def process_raw_data():
 
         try:
             with open(file_path, 'r', encoding='utf-8') as f:
-                personas_from_file = json.load(f)
+                personas_from_file = [json.loads(line) for line in f]
 
             if not isinstance(personas_from_file, list):
                 print(f"Warning: File '{os.path.basename(file_path)}' does not contain a JSON list. Skipping.")

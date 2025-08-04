@@ -3,7 +3,7 @@
 # /// script
 # requires-python = ">=3.12"
 # dependencies = [
-#   "openai>=1.0",
+#   "huggingface-hub>=0.23",
 #   "pydantic"
 # ]
 # ///
@@ -12,19 +12,32 @@ import os
 import json
 import time
 import random
-from openai import OpenAI
+import asyncio
+from typing import List, Set
+from huggingface_hub import AsyncInferenceClient
 from pydantic import BaseModel
 
-# Ensure the OpenAI-compatible server details are available
-# For a local server like llama.cpp, OPENAI_API_BASE is the key variable.
-# The API key is often not required for local servers, but the client needs a value.
+# --- Configuration ---
+TARGET_N = 400    # Target number of unique personas to generate
+MODEL_NAME = "zai-org/GLM-4.5-Air-FP8"  # "moonshotai/Kimi-K2-Instruct" # Or any other compatible model
+CONCURRENCY = 15      # Max number of parallel requests.
+CHECKPOINT_EVERY = 50  # Save progress to the file after this many successful generations.
+RESET_EVERY = 50      # Reset to seed personas every X generations to prevent drift.
+NUM_REFERENCES = 3    # Number of seed personas to use as references for each generation
 
-OPENAI_API_BASE = os.environ.get("OPENAI_API_BASE", "http://localhost:5000/v1")  # Change this to your server's URL if needed
+# Ensure the Hugging Face token is available
+if "HF_TOKEN" not in os.environ:
+    raise ValueError("Missing Hugging Face token. Please set the HF_TOKEN environment variable.")
 
-# Other definitions
-NUM_REFERENCES = 3  # Number of seed personas to use as references for each generation
-TARGET_N = 10000    # Target number of unique personas to generate
-MODEL_NAME = "Qwen/Qwen3-30B-A3B-Instruct-2507"
+# Use the Asynchronous client for parallel execution.
+# The provider can be changed to "huggingface", "anyscale", etc.
+client = AsyncInferenceClient(
+    provider="together",
+    # provider="fireworks-ai",
+    api_key=os.environ.get("HF_TOKEN")
+)
+
+# --- Pydantic Models for Data Structure ---
 
 # Define your detailed persona schema
 class Persona(BaseModel):
@@ -35,8 +48,10 @@ class Persona(BaseModel):
     background: str
     chatting_style: str
 
+# --- API Configuration ---
+
 # Define the structured JSON output format for the model
-# NOTE: This json_schema feature requires a compatible server (e.g., TogetherAI, Anyscale, or modern llama.cpp with grammar support).
+# NOTE: This json_schema feature requires a compatible server.
 response_format = {
     "type": "json_schema",
     "json_schema": {
@@ -46,11 +61,7 @@ response_format = {
     },
 }
 
-# Initialize the OpenAI client to connect to a compatible server
-client = OpenAI(
-    base_url=OPENAI_API_BASE,
-    api_key=os.environ.get("OPENAI_API_KEY", "not-needed"),  # API key is often not required for local servers
-)
+# --- Data Loading and Helper Functions ---
 
 # Load persona components from the seed data
 with open("data/seed/persona_components.json", "r") as f:
@@ -58,8 +69,8 @@ with open("data/seed/persona_components.json", "r") as f:
 
 # Begin with a few seed personas
 seed_personas = []
-with open("data/seed/personas.json", "r") as f:
-    seed_personas = json.load(f)
+with open("data/seed/personas.jsonl", "r") as f:
+    seed_personas = [json.loads(line) for line in f]
 
 # Seed names for the personas
 first_names = []
@@ -80,9 +91,6 @@ def generate_random_name():
     last_name = random.choice(last_names)
     return f"{first_name} {last_name}"
 
-def generate_random_username():
-    return random.choice(usernames)
-
 def weighted_choice(component_list):
     """Selects one item from a list of {'value': ..., 'weight': ...} objects."""
     values = [item['value'] for item in component_list]
@@ -95,94 +103,145 @@ def weighted_sample(component_list, k):
     weights = [item['weight'] for item in component_list]
     return random.choices(values, weights=weights, k=k)
 
-# Iteratively grow the persona pool
-persona_pool = seed_personas.copy()
-timestamp = int(time.time())
-output_filename = f"data/raw/data_{MODEL_NAME.split("/")[-1]}_{timestamp}.json"
+def save_to_jsonl(data: dict, filepath: str):
+    """Appends a dictionary as a new line in a JSONL file."""
+    with open(filepath, "a", encoding="utf-8") as f:
+        f.write(json.dumps(data, ensure_ascii=False) + "\n")
 
-print(f"Starting persona generation. Target: {TARGET_N} personas.")
+# --- Main Generation Logic (Parallelized) ---
 
-while len(persona_pool) < TARGET_N:
-    # Select the last few personas as reference for generating the next one
-    if len(persona_pool) > 0 and len(persona_pool) % 50 == 0:
-        # Use the seed personas as references every 50 iterations to guide the model back to our objectives
-        references = random.sample(seed_personas, min(len(seed_personas), NUM_REFERENCES))
-    else:
-        # Use a dynamic lookback range to lessen recent errors propagation
-        lookback_range = min(len(persona_pool), 20)
-        reference_pool = persona_pool[-lookback_range:]
-        references = random.sample(reference_pool, min(len(reference_pool), NUM_REFERENCES))
+async def generate_one_persona(
+    semaphore: asyncio.Semaphore,
+    reference_personas: List[dict]
+) -> Persona | None:
+    """Generates a single new persona using the LLM."""
+    async with semaphore:
+        try:
+            # Prepare the prompt with random components
+            profession = weighted_choice(components['professions'])
+            life_context = weighted_choice(components['life_contexts'])
+            num_traits = 6
+            selected_traits = list(set(weighted_sample(components['traits'], k=num_traits)))
+            chat_quirk = weighted_choice(components['chatting_quirks'])
+            age = random.randint(19, 75)
 
-    profession = weighted_choice(components['professions'])
-    life_context = weighted_choice(components['life_contexts'])
-    num_traits = random.randint(3, 5)
-    selected_traits = list(set(weighted_sample(components['traits'], k=num_traits)))
-    chat_quirk = weighted_choice(components['chatting_quirks'])
-    age = random.randint(19, 75)
+            instruction = (
+                "Here are some examples of personas we have already generated. AVOID repeating their themes:\n"
+                + "\n".join([json.dumps(p, ensure_ascii=False) for p in reference_personas]) +
+                f"\n\n---\n"
+                f"Your task is to generate a NEW, unique persona by creatively combining the following random elements. Create a believable, specific character who embodies all these aspects. Do not just list the components; weave them into a coherent story.\n\n"
+                f"**BUILDING BLOCKS TO COMBINE:**\n"
+                f"- **Profession:** {profession}\n"
+                f"- **Life Context:** They are currently {life_context}.\n"
+                f"- **Core Character Traits:** Should reflect: {', '.join(selected_traits)}.\n"
+                f"- **Chat Style Inspiration:** Their style is inspired by this quirk: \"{chat_quirk}\"\n"
+                f"- **Target Age:** The persona must be {age} years old, unless completely unreaonable given their profession, in which case you can choose an age yourself.\n\n"
+                f"---"
+                f"**JSON OUTPUT TASK:**\n"
+                f"Create a single JSON object for a persona named '{generate_random_name()}'. "
+                f"Follow these rules for the JSON fields:\n"
+                f"- **traits:** Choose 3-6 adjectives from the list above that best fit the final character you imagined.\n"
+                f"- **background:** A short, specific 1-2 sentence story (≤300 chars) that integrates the profession, context, and age.\n"
+                f"- **chatting_style:** A brief description (≤120 chars) of their texting style, directly inspired by the quirk but improved as needed.\n"
+                f"The final output must be only the strict JSON object, with no extra text."
+            )
 
-    instruction = (
-        "Here are some examples of personas we have already generated. AVOID repeating their themes:\n"
-        + "\n".join([json.dumps(p, ensure_ascii=False) for p in references]) +
-        f"\n\n---\n"
-        f"Your task is to generate a NEW, unique persona by creatively combining the following random elements. Create a believable, specific character who embodies all these aspects. Do not just list the components; weave them into a coherent story.\n\n"
-        f"**BUILDING BLOCKS TO COMBINE:**\n"
-        f"- **Profession:** {profession}\n"
-        f"- **Life Context:** They are currently {life_context}.\n"
-        f"- **Core Character Traits:** Should reflect: {', '.join(selected_traits)}.\n"
-        f"- **Chat Style Inspiration:** Their style is inspired by this quirk: \"{chat_quirk}\"\n"
-        f"- **Target Age:** The persona must be {age} years old, unless completely unreaonable given their profession, in which case you can choose an age yourself.\n\n"
-        f"---"
-        f"**JSON OUTPUT TASK:**\n"
-        f"Create a single JSON object for a persona named '{generate_random_name()}'. "
-        f"Follow these rules for the JSON fields:\n"
-        f"- **traits:** Choose 3-6 adjectives from the list above that best fit the final character you imagined.\n"
-        f"- **background:** A short, specific 1-2 sentence story (≤300 chars) that integrates the profession, context, and age.\n"
-        f"- **chatting_style:** A brief description (≤120 chars) of their texting style, directly inspired by the quirk.\n"
-        f"The final output must be only the strict JSON object, with no extra text."
-    )
+            messages = [
+                {"role": "system", "content": "You are a creative persona generator. You will create and output only a single, structured persona JSON object, following the provided schema strictly. Do not add any extra text or explanation."},
+                {"role": "user", "content": instruction}
+            ]
 
-    messages = [
-        {"role": "system", "content": "You are a creative persona generator. You will create and output only a single, structured persona JSON object, following the provided schema strictly. Do not add any extra text or explanation."},
-        {"role": "user", "content": instruction}
-    ]
+            response = await client.chat_completion(
+                messages=messages,
+                model=MODEL_NAME,
+                response_format=response_format,
+                max_tokens=512,
+                temperature=0.8,
+            )
 
-    try:
-        response = client.chat.completions.create(
-            messages=messages,
-            model=MODEL_NAME,
-            response_format=response_format,
-            max_tokens=512,
-            temperature=0.8,
-        )
+            persona_data = json.loads(response.choices[0].message.content)
+            return Persona(**persona_data)
 
-        persona_json_str = response.choices[0].message.content
-        new_persona_data = json.loads(persona_json_str)
-        persona_obj = Persona(**new_persona_data)
+        except Exception as e:
+            print(f"⚠️ Error generating a persona: {e}. Retrying with another task.")
+            await asyncio.sleep(2) # Prevent rapid-fire failures
+            return None
 
-        # Check for similarity to avoid subtle repetitions
-        is_too_similar = False
-        for p in references:
-            if p['background'].split()[0] == persona_obj.background.split()[0] and len(set(p['traits']) & set(persona_obj.traits)) > 2:
-                 print(f"⚠️  Skipping similar persona: {persona_obj.name}")
-                 is_too_similar = True
-                 break
 
-        if not is_too_similar:
-            persona_pool.append(persona_obj.model_dump())
-            print(f"✅ Added persona '{persona_obj.name}' (total: {len(persona_pool)})")
+async def main():
+    # This pool will grow with new generations and is used for reference selection
+    persona_pool = seed_personas.copy()
 
-    except Exception as e:
-        print(f"❌ Error generating persona: {e}")
+    if not seed_personas:
+        print("⚠️ No seed personas loaded. Cannot proceed with few-shot prompting.")
+        return
 
-    # Save to file periodically
-    if len(persona_pool) % 5 == 0:
-        print(f"\n--- Saving progress to {output_filename} ---\n")
-        with open(output_filename, "w", encoding="utf-8") as f:
-            json.dump(persona_pool, f, ensure_ascii=False, indent=2)
+    timestamp = int(time.time())
+    output_filename = f"data/raw/data_{MODEL_NAME.split('/')[-1]}_{timestamp}.jsonl"
+    os.makedirs(os.path.dirname(output_filename), exist_ok=True)
 
-# Save the final result
-print(f"\nTarget of {TARGET_N} reached. Saving final pool to {output_filename}.")
-with open(output_filename, "w", encoding="utf-8") as f:
-    json.dump(persona_pool, f, ensure_ascii=False, indent=2)
+    print(f"\nStarting persona generation. Target: {TARGET_N} personas.")
+    print(f"Concurrency: {CONCURRENCY}, Checkpoint: {CHECKPOINT_EVERY}, Anti-Drift Reset: {RESET_EVERY}")
+    print(f"Output will be saved to: {output_filename}")
 
-print("✅ Script finished.")
+    semaphore = asyncio.Semaphore(CONCURRENCY)
+    tasks: Set[asyncio.Task] = set()
+    results_buffer: List[Persona] = []
+    successful_generations = 0
+
+    while successful_generations < TARGET_N:
+        # Launch new tasks if we have capacity
+        while len(tasks) < CONCURRENCY and successful_generations + len(tasks) < TARGET_N:
+            current_iteration = successful_generations + len(tasks)
+            # Determine which pool of examples to use for this task
+            if RESET_EVERY > 0 and current_iteration > 0 and current_iteration % RESET_EVERY == 0:
+                reference_pool = random.sample(seed_personas, min(len(seed_personas), NUM_REFERENCES))
+                print(f"--- 🔄 Iteration {current_iteration}: Resetting reference pool to seeds to prevent drift ---")
+            else:
+                lookback_range = min(len(persona_pool), 20)
+                dynamic_reference_pool = persona_pool[-lookback_range:]
+                reference_pool = random.sample(dynamic_reference_pool, min(len(dynamic_reference_pool), NUM_REFERENCES))
+
+            task = asyncio.create_task(
+                generate_one_persona(semaphore, reference_pool)
+            )
+            tasks.add(task)
+
+        # Wait for the next task to complete
+        done, pending = await asyncio.wait(tasks, return_when=asyncio.FIRST_COMPLETED)
+
+        for future in done:
+            result = await future
+            tasks.remove(future) # Remove the completed task from the active set
+
+            if result:
+                successful_generations += 1
+                # Add the new persona to the dynamic pool for future generations
+                persona_dict = result.model_dump()
+                persona_pool.append(persona_dict)
+                results_buffer.append(persona_dict)
+
+                print(f"✅ ({successful_generations}/{TARGET_N}) Generated: {result.name}")
+
+                # Checkpoint logic
+                if successful_generations > 0 and successful_generations % CHECKPOINT_EVERY == 0 and results_buffer:
+                    print(f"\n--- CHECKPOINT: Saving {len(results_buffer)} personas to {output_filename}... ---")
+                    for p_dict in results_buffer:
+                        save_to_jsonl(p_dict, output_filename)
+                    results_buffer.clear()
+                    print("--- ✅ CHECKPOINT Complete. ---\n")
+
+    # Final save for any remaining items in the buffer
+    if results_buffer:
+        print(f"\n--- FINAL SAVE: Saving {len(results_buffer)} remaining personas to file... ---")
+        for p_dict in results_buffer:
+            save_to_jsonl(p_dict, output_filename)
+        print("--- ✅ FINAL SAVE Complete. ---")
+
+    print("\n-----------------------------------------")
+    print(f"✅ Target of {TARGET_N} attempted. {successful_generations} personas successfully generated.")
+    print(f"Final data saved in {output_filename}")
+    print("-----------------------------------------")
+
+if __name__ == "__main__":
+    asyncio.run(main())
