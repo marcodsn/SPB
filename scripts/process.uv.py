@@ -8,6 +8,7 @@ import os
 import json
 import glob
 import time
+import uuid
 
 # Define paths
 RAW_DATA_DIR = "data/raw"
@@ -96,6 +97,8 @@ def process_raw_data():
             for persona in personas_from_file:
                 # Add the 'model' field
                 persona['model'] = model_name
+                # Add an 'id' field
+                persona['id'] = uuid.uuid4().hex
                 all_personas.append(persona)
 
         except json.JSONDecodeError as e:

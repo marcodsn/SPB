@@ -23,6 +23,8 @@ OPENAI_API_BASE = os.environ.get("OPENAI_API_BASE", "http://localhost:5000/v1") 
 
 # Other definitions
 NUM_REFERENCES = 3  # Number of seed personas to use as references for each generation
+TARGET_N = 10000    # Target number of unique personas to generate
+MODEL_NAME = "Qwen/Qwen3-30B-A3B-Instruct-2507"
 
 # Define your detailed persona schema
 class Persona(BaseModel):
@@ -95,16 +97,12 @@ def weighted_sample(component_list, k):
 
 # Iteratively grow the persona pool
 persona_pool = seed_personas.copy()
-target_n = 10000
-# IMPORTANT: Change this to your model's identifier as recognized by your server.
-# For llama.cpp, it might be the model file path. For a service, it's a specific string.
-model_name = "Qwen/Qwen3-30B-A3B-Instruct-2507"
 timestamp = int(time.time())
-output_filename = f"data/raw/data_{model_name.split("/")[-1]}_{timestamp}.json"
+output_filename = f"data/raw/data_{MODEL_NAME.split("/")[-1]}_{timestamp}.json"
 
-print(f"Starting persona generation. Target: {target_n} personas.")
+print(f"Starting persona generation. Target: {TARGET_N} personas.")
 
-while len(persona_pool) < target_n:
+while len(persona_pool) < TARGET_N:
     # Select the last few personas as reference for generating the next one
     if len(persona_pool) > 0 and len(persona_pool) % 50 == 0:
         # Use the seed personas as references every 50 iterations to guide the model back to our objectives
@@ -151,7 +149,7 @@ while len(persona_pool) < target_n:
     try:
         response = client.chat.completions.create(
             messages=messages,
-            model=model_name,
+            model=MODEL_NAME,
             response_format=response_format,
             max_tokens=512,
             temperature=0.8,
@@ -183,7 +181,7 @@ while len(persona_pool) < target_n:
             json.dump(persona_pool, f, ensure_ascii=False, indent=2)
 
 # Save the final result
-print(f"\nTarget of {target_n} reached. Saving final pool to {output_filename}.")
+print(f"\nTarget of {TARGET_N} reached. Saving final pool to {output_filename}.")
 with open(output_filename, "w", encoding="utf-8") as f:
     json.dump(persona_pool, f, ensure_ascii=False, indent=2)
 
