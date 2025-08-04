@@ -18,8 +18,8 @@ from huggingface_hub import AsyncInferenceClient
 from pydantic import BaseModel
 
 # --- Configuration ---
-TARGET_N = 400    # Target number of unique personas to generate
-MODEL_NAME = "zai-org/GLM-4.5-Air-FP8"  # "moonshotai/Kimi-K2-Instruct" # Or any other compatible model
+TARGET_N = 4750    # Target number of unique personas to generate
+MODEL_NAME = "zai-org/GLM-4.5-Air-FP8"  #  "zai-org/GLM-4.5-Air-FP8"  # "moonshotai/Kimi-K2-Instruct" # Or any other compatible model
 CONCURRENCY = 15      # Max number of parallel requests.
 CHECKPOINT_EVERY = 50  # Save progress to the file after this many successful generations.
 RESET_EVERY = 50      # Reset to seed personas every X generations to prevent drift.

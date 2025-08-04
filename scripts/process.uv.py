@@ -13,6 +13,7 @@ import uuid
 # Define paths
 RAW_DATA_DIR = "data/raw"
 PROCESSED_DATA_DIR = "data/processed"
+WHITELIST = ["data_Kimi-K2-Instruct_1754323519.jsonl", "data_GLM-4.5-Air-FP8_1754324376.jsonl"]  # If not empty, only process files in this list
 
 def extract_model_name_from_filename(filename):
     """
@@ -76,6 +77,11 @@ def process_raw_data():
     print(f"Found {len(jsonl_files)} JSONL files to process in '{RAW_DATA_DIR}'.")
 
     for file_path in jsonl_files:
+
+        if len(WHITELIST) > 0 and os.path.basename(file_path) not in WHITELIST:
+            print(f"Skipping '{os.path.basename(file_path)}' as it is not in the whitelist.")
+            continue
+
         total_files_processed += 1
         model_name = extract_model_name_from_filename(file_path)
 

@@ -75,10 +75,10 @@ The personas were generated using the following pipeline:
 ## Known Limitations
 
 - **Narrative Depth**: The background and chatting_style descriptions are intentionally brief. They provide a starting point but lack the depth of a fully developed character biography.
-- **Generation Patterns**: Despite efforts to ensure novelty, the generation process may fall into subtle patterns or tropes over 6,000 iterations.
+- **Generation Patterns**: Despite efforts to ensure novelty, the generation process may fall into subtle patterns or tropes over 5,000 iterations.
 
 UPDATE: Here follows a list of improvements we plan to implement in the next iteration of this dataset:
-- **Extreme Personas**: Consistently negative or erratic emotional states, dysfunctional communication patterns, personas that are defined by their impairments or unusual thought processes, rather than just their coping mechanisms.
+- **Extreme Personas**: Consistently negative or erratic emotional states, dysfunctional communication patterns, personas that are defined by their impairments or unusual thought processes, rather than just their coping mechanisms. (UPDATE 04/08/2025: Done!)
 - **Waaaaaay more seed components**: While we think our professions list is already quite good, we want to expand the list of life contexts, traits, and chatting quirks to allow for more diverse personas.
 
 ## Additional Information

@@ -1,30 +1,32 @@
 {
   "professions": [
     { "value": "Retail Associate", "weight": 22 },
-    { "value": "Student", "weight": 17 },
-    { "value": "Administrative Assistant", "weight": 15 },
-    { "value": "Customer Service Representative", "weight": 19 },
-    { "value": "Server / Waitstaff", "weight": 16 },
-    { "value": "Truck / Delivery Driver", "weight": 17 },
     { "value": "Fast Food Worker / Cashier", "weight": 20 },
     { "value": "K-12 Teacher", "weight": 20 },
-    { "value": "Accountant", "weight": 12 },
+    { "value": "Registered Nurse", "weight": 20 },
+    { "value": "Customer Service Representative", "weight": 19 },
+    { "value": "Student", "weight": 17 },
+    { "value": "Truck / Delivery Driver", "weight": 17 },
+    { "value": "Server / Waitstaff", "weight": 16 },
+    { "value": "Administrative Assistant", "weight": 15 },
+    { "value": "Stay-at-Home Parent", "weight": 14 },
     { "value": "Construction Worker", "weight": 13 },
     { "value": "Sales Representative", "weight": 13 },
-    { "value": "Registered Nurse", "weight": 20 },
+    { "value": "Accountant", "weight": 12 },
     { "value": "Software Engineer", "weight": 12 },
-    { "value": "IT Support Specialist", "weight": 9 },
+    { "value": "Gig Driver (Uber/DoorDash)", "weight": 12 },
     { "value": "Mechanic", "weight": 10 },
     { "value": "HR Generalist", "weight": 10 },
-    { "value": "Gig Driver (Uber/DoorDash)", "weight": 12 },
-    { "value": "Marketing Manager", "weight": 5 },
     { "value": "Electrician", "weight": 10 },
-    { "value": "Plumber", "weight": 9 },
     { "value": "Project Manager", "weight": 10 },
+    { "value": "IT Support Specialist", "weight": 9 },
+    { "value": "Plumber", "weight": 9 },
+    { "value": "Disabled / On Disability", "weight": 8 },
     { "value": "Data Analyst", "weight": 8 },
     { "value": "Medical Assistant", "weight": 8 },
     { "value": "Barista", "weight": 8 },
     { "value": "Bank Teller", "weight": 8 },
+    { "value": "Retired", "weight": 7 },
     { "value": "Social Media Manager", "weight": 7 },
     { "value": "Real Estate Agent", "weight": 7 },
     { "value": "Graphic Designer", "weight": 7 },
@@ -37,6 +39,7 @@
     { "value": "Social Worker", "weight": 6 },
     { "value": "Financial Advisor", "weight": 6 },
     { "value": "Hairstylist / Barber", "weight": 6 },
+    { "value": "Marketing Manager", "weight": 5 },
     { "value": "Insurance Agent", "weight": 5 },
     { "value": "Paralegal", "weight": 5 },
     { "value": "Dental Hygienist", "weight": 5 },
@@ -56,6 +59,9 @@
     { "value": "Pharmacist", "weight": 4 },
     { "value": "Firefighter", "weight": 4 },
     { "value": "Data Entry Clerk", "weight": 4 },
+    { "value": "Political Staffer / Campaign Worker", "weight": 3 },
+    { "value": "Clergy / Religious Leader", "weight": 3 },
+    { "value": "Blogger / Influencer", "weight": 3 },
     { "value": "Librarian", "weight": 3 },
     { "value": "Paramedic / EMT", "weight": 3 },
     { "value": "Architect", "weight": 3 },
@@ -65,6 +71,9 @@
     { "value": "Flight Attendant", "weight": 3 },
     { "value": "Photographer", "weight": 3 },
     { "value": "Translator / Interpreter", "weight": 3 },
+    { "value": "Union Representative", "weight": 2 },
+    { "value": "Pawn Shop Broker", "weight": 2 },
+    { "value": "Night Auditor", "weight": 2 },
     { "value": "Chiropractor", "weight": 2 },
     { "value": "Musician", "weight": 2 },
     { "value": "Mental Health Counselor", "weight": 2 },
@@ -75,6 +84,7 @@
     { "value": "Speech Therapist", "weight": 2 },
     { "value": "Parking Enforcement Officer", "weight": 2 },
     { "value": "Unemployed", "weight": 2 },
+    { "value": "Trust Fund Recipient", "weight": 1 },
     { "value": "Collections Agent", "weight": 1 },
     { "value": "Radio DJ", "weight": 1 },
     { "value": "Geologist", "weight": 1 },
@@ -90,128 +100,198 @@
   "life_contexts": [
     {
       "value": "enjoying a stable routine and work-life balance",
-      "weight": 20
+      "weight": 30
     },
     {
       "value": "planning a vacation or trip they're excited about",
-      "weight": 18
+      "weight": 25
     },
-    { "value": "juggling childcare and a full-time job", "weight": 15 },
-    { "value": "saving up for a down payment on a house", "weight": 14 },
-    { "value": "living paycheck to paycheck", "weight": 12 },
-    { "value": "trying to eat healthier and exercise more", "weight": 12 },
-    { "value": "dealing with burnout from their demanding job", "weight": 10 },
-    { "value": "building a side hustle or creative project", "weight": 10 },
-    { "value": "trying to pay off significant student loan debt", "weight": 9 },
-    { "value": "recently moved to a new city and exploring", "weight": 9 },
+    { "value": "juggling childcare and a full-time job", "weight": 20 },
+    { "value": "saving up for a down payment on a house", "weight": 18 },
+    { "value": "trying to eat healthier and exercise more", "weight": 18 },
+    { "value": "living paycheck to paycheck", "weight": 15 },
+    { "value": "building a side hustle or creative project", "weight": 12 },
+    { "value": "dealing with burnout from their demanding job", "weight": 12 },
+    { "value": "recently moved to a new city and exploring", "weight": 10 },
+    {
+      "value": "trying to pay off significant student loan debt",
+      "weight": 10
+    },
     {
       "value": "managing a chronic illness or mental health condition",
-      "weight": 8
+      "weight": 9
     },
-    { "value": "caring for an aging or sick parent", "weight": 8 },
-    { "value": "planning their upcoming wedding", "weight": 8 },
-    { "value": "enjoying retirement and pursuing hobbies", "weight": 7 },
-    { "value": "working a second job to make ends meet", "weight": 7 },
-    { "value": "starting a new job in a different field", "weight": 7 },
-    { "value": "feeling lonely and trying to make new friends", "weight": 6 },
+    { "value": "caring for an aging or sick parent", "weight": 9 },
+    { "value": "planning their upcoming wedding", "weight": 9 },
+    { "value": "enjoying retirement and pursuing hobbies", "weight": 8 },
+    { "value": "working a second job to make ends meet", "weight": 8 },
+    { "value": "starting a new job in a different field", "weight": 8 },
+    { "value": "feeling lonely and trying to make new friends", "weight": 7 },
     {
       "value": "volunteering for a cause they are passionate about",
-      "weight": 6
+      "weight": 7
     },
+    { "value": "celebrating a recent promotion or achievement", "weight": 7 },
+    { "value": "learning new skills through online courses", "weight": 7 },
     { "value": "dealing with a toxic boss or work environment", "weight": 6 },
-    { "value": "celebrating a recent promotion or achievement", "weight": 6 },
-    { "value": "learning new skills through online courses", "weight": 6 },
-    { "value": "renovating their home or apartment", "weight": 5 },
-    { "value": "navigating a recent breakup or divorce", "weight": 5 },
-    { "value": "facing potential layoffs or job insecurity", "weight": 5 },
+    { "value": "renovating their home or apartment", "weight": 6 },
     {
       "value": "training for a major athletic event like a marathon",
-      "weight": 5
+      "weight": 6
     },
+    { "value": "navigating a recent breakup or divorce", "weight": 5 },
     {
       "value": "going back to school for another degree or certification",
-      "weight": 4
+      "weight": 5
     },
+    { "value": "navigating co-parenting with an ex-partner", "weight": 5 },
+    { "value": "dealing with teenage children and their drama", "weight": 5 },
+    { "value": "house hunting in a competitive market", "weight": 5 },
     {
       "value": "trying to get a small business or startup off the ground",
       "weight": 4
     },
-    { "value": "navigating co-parenting with an ex-partner", "weight": 4 },
     { "value": "learning a new language or musical instrument", "weight": 4 },
-    { "value": "dealing with teenage children and their drama", "weight": 4 },
-    { "value": "house hunting in a competitive market", "weight": 4 },
-    {
-      "value": "going through a mid-life crisis and questioning their choices",
-      "weight": 3
-    },
+    { "value": "raising a child with special needs", "weight": 4 },
     {
       "value": "coping with an empty nest after their kids left for college",
       "weight": 3
     },
     { "value": "recovering from a serious accident or surgery", "weight": 3 },
-    { "value": "raising a child with special needs", "weight": 3 },
     { "value": "dealing with the legal system over a dispute", "weight": 3 },
+    { "value": "caring for pets with medical issues", "weight": 3 },
+    { "value": "dealing with identity theft or financial fraud", "weight": 2 },
+    {
+      "value": "going through a mid-life crisis and questioning their choices",
+      "weight": 2
+    },
     { "value": "newly sober and navigating recovery", "weight": 2 },
     { "value": "exploring their gender identity or sexuality", "weight": 2 },
     { "value": "writing a novel in their spare time", "weight": 2 },
-    { "value": "caring for pets with medical issues", "weight": 2 },
-    { "value": "dealing with identity theft or financial fraud", "weight": 2 },
-    {
-      "value": "handling a sudden and unexpected financial windfall",
-      "weight": 1
-    },
-    { "value": "in the middle of a messy inheritance dispute", "weight": 1 },
     {
       "value": "involved in a niche, competitive hobby (e.g., dog shows, e-sports)",
+      "weight": 2
+    },
+    {
+      "value": "handling a sudden and unexpected financial windfall",
+      "weight": 2
+    },
+    {
+      "value": "Struggling with a severe addiction (substances, gambling, etc.)",
       "weight": 1
-    }
+    },
+    {
+      "value": "Completely estranged from their immediate family",
+      "weight": 1
+    },
+    { "value": "On probation or parole", "weight": 1 },
+    {
+      "value": "Deeply invested in a conspiracy theory (e.g., QAnon, flat earth)",
+      "weight": 1
+    },
+    {
+      "value": "Caring for a child with a severe disability or illness",
+      "weight": 1
+    },
+    { "value": "In the middle of a messy, high-conflict divorce", "weight": 1 },
+    {
+      "value": "Actively being sued or in the process of suing someone",
+      "weight": 1
+    },
+    { "value": "Recovering from a major personal betrayal", "weight": 1 },
+    { "value": "Living off-grid by choice", "weight": 1 },
+    {
+      "value": "Believes they are the victim of a targeted harassment campaign (gang-stalking)",
+      "weight": 1
+    },
+    { "value": "Declaring bankruptcy or facing foreclosure", "weight": 1 },
+    {
+      "value": "Actively involved in a high-demand group or cult",
+      "weight": 1
+    },
+    {
+      "value": "Experiencing dissociative episodes or memory loss",
+      "weight": 1
+    },
+    {
+      "value": "Convinced they have an undiagnosed, serious illness (cyberchondria)",
+      "weight": 1
+    },
+    {
+      "value": "Is a primary caregiver for multiple dependents (e.g., kids and parents)",
+      "weight": 1
+    },
+    { "value": "Fighting a wrongful conviction or charge", "weight": 1 },
+    { "value": "in the middle of a messy inheritance dispute", "weight": 1 },
+    { "value": "facing potential layoffs or job insecurity", "weight": 1 }
   ],
   "traits": [
-    { "value": "friendly", "weight": 25 },
-    { "value": "kind", "weight": 20 },
-    { "value": "reliable", "weight": 18 },
-    { "value": "pragmatic", "weight": 15 },
-    { "value": "busy", "weight": 15 },
-    { "value": "curious", "weight": 14 },
-    { "value": "organized", "weight": 12 },
-    { "value": "outgoing", "weight": 12 },
-    { "value": "patient", "weight": 11 },
-    { "value": "empathetic", "weight": 11 },
-    { "value": "creative", "weight": 10 },
-    { "value": "witty", "weight": 10 },
-    { "value": "optimistic", "weight": 10 },
-    { "value": "stressed", "weight": 9 },
-    { "value": "tired", "weight": 9 },
-    { "value": "resilient", "weight": 9 },
-    { "value": "ambitious", "weight": 9 },
-    { "value": "calm", "weight": 8 },
-    { "value": "driven", "weight": 8 },
-    { "value": "detail-oriented", "weight": 8 },
-    { "value": "hopeful", "weight": 8 },
-    { "value": "sarcastic", "weight": 8 },
-    { "value": "introverted", "weight": 7 },
-    { "value": "direct", "weight": 7 },
-    { "value": "anxious", "weight": 6 },
-    { "value": "reserved", "weight": 6 },
-    { "value": "no-nonsense", "weight": 6 },
-    { "value": "diplomatic", "weight": 5 },
-    { "value": "idealistic", "weight": 5 },
-    { "value": "methodical", "weight": 5 },
-    { "value": "charismatic", "weight": 5 },
-    { "value": "stubborn", "weight": 4 },
-    { "value": "pessimistic", "weight": 4 },
-    { "value": "cynical", "weight": 4 },
-    { "value": "impulsive", "weight": 4 },
-    { "value": "jaded", "weight": 3 },
+    { "value": "friendly", "weight": 30 },
+    { "value": "kind", "weight": 30 },
+    { "value": "reliable", "weight": 25 },
+    { "value": "pragmatic", "weight": 22 },
+    { "value": "busy", "weight": 20 },
+    { "value": "curious", "weight": 18 },
+    { "value": "organized", "weight": 16 },
+    { "value": "outgoing", "weight": 16 },
+    { "value": "patient", "weight": 15 },
+    { "value": "empathetic", "weight": 15 },
+    { "value": "creative", "weight": 14 },
+    { "value": "witty", "weight": 14 },
+    { "value": "optimistic", "weight": 14 },
+    { "value": "resilient", "weight": 12 },
+    { "value": "ambitious", "weight": 12 },
+    { "value": "calm", "weight": 10 },
+    { "value": "driven", "weight": 10 },
+    { "value": "detail-oriented", "weight": 10 },
+    { "value": "hopeful", "weight": 10 },
+    { "value": "sarcastic", "weight": 9 },
+    { "value": "introverted", "weight": 8 },
+    { "value": "direct", "weight": 8 },
+    { "value": "tired", "weight": 13 },
+    { "value": "no-nonsense", "weight": 7 },
+    { "value": "stressed", "weight": 15 },
+    { "value": "diplomatic", "weight": 6 },
+    { "value": "idealistic", "weight": 6 },
+    { "value": "methodical", "weight": 6 },
+    { "value": "charismatic", "weight": 6 },
+    { "value": "reserved", "weight": 5 },
+    { "value": "stubborn", "weight": 5 },
+    { "value": "adventurous", "weight": 4 },
+    { "value": "analytical", "weight": 4 },
+    { "value": "anxious", "weight": 14 },
+    { "value": "impulsive", "weight": 3 },
     { "value": "meticulous", "weight": 3 },
     { "value": "stoic", "weight": 3 },
-    { "value": "adventurous", "weight": 3 },
-    { "value": "analytical", "weight": 3 },
-    { "value": "spontaneous", "weight": 2 },
-    { "value": "serene", "weight": 2 },
-    { "value": "whimsical", "weight": 2 },
+    { "value": "spontaneous", "weight": 3 },
+    { "value": "serene", "weight": 3 },
+    { "value": "whimsical", "weight": 3 },
+    { "value": "competitive", "weight": 3 },
+    { "value": "passive-aggressive", "weight": 2 },
+    { "value": "pessimistic", "weight": 2 },
+    { "value": "cynical", "weight": 2 },
+    { "value": "jaded", "weight": 2 },
     { "value": "naive", "weight": 2 },
-    { "value": "competitive", "weight": 2 },
+    { "value": "manipulative", "weight": 1 },
+    { "value": "chronically jealous", "weight": 1 },
+    { "value": "argumentative", "weight": 1 },
+    { "value": "paranoid", "weight": 1 },
+    { "value": "self-pitying", "weight": 1 },
+    { "value": "sanctimonious", "weight": 1 },
+    { "value": "abrasive", "weight": 1 },
+    { "value": "erratic", "weight": 1 },
+    { "value": "reckless", "weight": 1 },
+    { "value": "histrionic", "weight": 1 },
+    { "value": "fatalistic", "weight": 1 },
+    { "value": "narcissistic", "weight": 1 },
+    { "value": "obsessive", "weight": 1 },
+    { "value": "vindictive", "weight": 1 },
+    { "value": "misanthropic", "weight": 1 },
+    { "value": "delusional", "weight": 1 },
+    { "value": "nihilistic", "weight": 1 },
+    { "value": "conspiratorial", "weight": 1 },
+    { "value": "self-destructive", "weight": 1 },
+    { "value": "sycophantic", "weight": 1 },
     { "value": "enigmatic", "weight": 1 },
     { "value": "magnanimous", "weight": 1 },
     { "value": "cantankerous", "weight": 1 }
@@ -219,94 +299,88 @@
   "chatting_quirks": [
     {
       "value": "Uses perfect grammar and punctuation, like a style guide.",
-      "weight": 20
+      "weight": 25
     },
     {
       "value": "Heavy use of emojis to convey tone (both common and obscure).",
-      "weight": 18
+      "weight": 23
     },
     {
       "value": "all lowercase, minimal punctuation, very casual.",
-      "weight": 15
+      "weight": 28
     },
     {
       "value": "Uses a lot of current internet slang and acronyms (iykyk, fr, ngl).",
-      "weight": 12
-    },
-    {
-      "value": "Sends short, clipped, one-to-three-word replies.",
-      "weight": 10
+      "weight": 20
     },
     {
       "value": "Is a 'double-texter,' sending multiple short messages in a row.",
+      "weight": 22
+    },
+    {
+      "value": "Sends short, clipped, one-to-three-word replies.",
+      "weight": 18
+    },
+    {
+      "value": "Responds instantly, no matter the time of day or night.",
+      "weight": 15
+    },
+    {
+      "value": "Takes days to reply, but apologizes profusely when they do.",
+      "weight": 12
+    },
+    {
+      "value": "Always has to have the last word, even if it's just 'lol' or a thumbs-up emoji.",
+      "weight": 14
+    },
+    {
+      "value": "Ends short messages with a period, making them seem passive-aggressive or stern (e.g., 'Okay.', 'Sounds good.').",
+      "weight": 12
+    },
+    {
+      "value": "Immediately follows up a sent message with a correction using an asterisk (e.g., 'See you their' -> '*there').",
       "weight": 10
     },
     {
-      "value": "Never asks questions back; talks about themself but shows little curiosity in others.",
-      "weight": 9
-    },
-    {
-      "value": "Primarily 'reacts' to messages (with a heart, thumbs up, etc.) instead of replying with words.",
-      "weight": 9
+      "value": "Often reacts to messages (with a heart, thumbs up, etc.) instead of replying with words.",
+      "weight": 11
     },
     {
       "value": "Writes in long, reflective paragraphs, even for simple questions.",
       "weight": 8
     },
     {
-      "value": "Abuses ellipses... to create pauses... and add drama...",
-      "weight": 8
+      "value": "Frequently sends photos of their day (food, pets, scenery) along with messages.",
+      "weight": 9
     },
     {
-      "value": "Always has to have the last word, even if it's just 'lol' or a thumbs-up emoji.",
+      "value": "Often communicates through reaction GIFs and memes.",
+      "weight": 10
+    },
+    {
+      "value": "Immediately offers unsolicited advice or tries to 'fix' any problem mentioned.",
+      "weight": 9
+    },
+    {
+      "value": "Types with lots of typos but never corrects them.",
       "weight": 8
     },
+    { "value": "Uses old-school emoticons :) instead of emojis.", "weight": 7 },
+    { "value": "USES ALL CAPS WHEN EXCITED OR ANGRY.", "weight": 6 },
     {
       "value": "Loves to use dad jokes and bad puns at every opportunity.",
-      "weight": 7
-    },
-    {
-      "value": "Responds instantly, no matter the time of day or night.",
-      "weight": 7
-    },
-    {
-      "value": "Ends short messages with a period, making them seem passive-aggressive or stern (e.g., 'Okay.', 'Sounds good.').",
-      "weight": 7
-    },
-    {
-      "value": "Narrates their day with a stream of photos (food, pets, scenery) instead of text.",
-      "weight": 7
-    },
-    {
-      "value": "Communicates primarily through reaction GIFs and memes.",
       "weight": 6
     },
     {
-      "value": "USES ALL CAPS WHEN EXCITED OR ANGRY.",
-      "weight": 6
+      "value": "Sometimes sends voice notes instead of typing long responses.",
+      "weight": 7
     },
     {
-      "value": "Ends every message with a formal or friendly sign-off ('Best,', 'Cheers,', 'xoxo').",
+      "value": "Types out sound effects or actions instead of using emojis (e.g., *sigh*, *facepalm*, *sips coffee*).",
       "weight": 6
     },
     {
       "value": "Uses 'therapy speak' in casual conversation (e.g., 'holding space,' 'emotional bandwidth,' 'that's not serving me').",
-      "weight": 6
-    },
-    {
-      "value": "Immediately offers unsolicited advice or tries to 'fix' any problem mentioned.",
-      "weight": 6
-    },
-    {
-      "value": "Takes days to reply, but apologizes profusely when they do.",
-      "weight": 5
-    },
-    {
-      "value": "Uses italics or tildes for emphasis and tone.",
-      "weight": 5
-    },
-    {
-      "value": "Immediately follows up a sent message with a correction using an asterisk (e.g., 'See you their' -> '*there').",
       "weight": 5
     },
     {
@@ -314,19 +388,20 @@
       "weight": 5
     },
     {
-      "value": "*Responds to complex topics by sending links to articles or YouTube videos.",
+      "value": "Always uses proper capitalization but never any punctuation.",
       "weight": 5
     },
+    { "value": "Uses excessive punctuation?!?! for emphasis!!!", "weight": 4 },
     {
-      "value": "Uses outdated slang from 10-15 years ago (e.g., 'epic fail', 'totes').",
+      "value": "Ends every message with a formal or friendly sign-off ('Best,', 'Cheers,', 'xoxo').",
       "weight": 4
     },
     {
-      "value": "Sends breathless, unpunctuated voice-to-text messages full of errors.",
+      "value": "Responds to complex topics by sending links to articles or YouTube videos.",
       "weight": 4
     },
     {
-      "value": "Sends long, rambling voice notes instead of texting.",
+      "value": "Is a chronic oversharer, offering up TMI without prompting.",
       "weight": 4
     },
     {
@@ -334,31 +409,19 @@
       "weight": 4
     },
     {
-      "value": "Types out sound effects or actions instead of using emojis (e.g., sigh, facepalm, sips coffee).",
-      "weight": 4
-    },
-    {
-      "value": "*Uses corporate jargon in casual contexts (e.g., 'Let's circle back on that,' 'What's your bandwidth?').",
-      "weight": 4
-    },
-    {
-      "value": "Sends vague, attention-seeking messages to prompt a 'What's wrong?' response (e.g., 'Ugh, some days...').",
-      "weight": 4
-    },
-    {
-      "value": "Always uses proper capitalization but never any punctuation",
+      "value": "Uses corporate jargon in casual contexts (e.g., 'Let's circle back on that,' 'What's your bandwidth?').",
       "weight": 3
     },
     {
-      "value": "Is a chronic oversharer, offering up TMI without prompting.",
+      "value": "Uses outdated slang from 10-15 years ago (e.g., 'epic fail', 'totes').",
       "weight": 3
     },
     {
-      "value": "Uses excessive punctuation?!?! for emphasis!!!",
+      "value": "Never uses contractions, resulting in a stilted, formal style.",
       "weight": 3
     },
     {
-      "value": "*Uses hashtags unironically in normal texts (e.g., 'Just finished my run! #blessed').",
+      "value": "Uses hashtags unironically in normal texts (e.g., 'Just finished my run! #blessed').",
       "weight": 3
     },
     {
@@ -366,31 +429,95 @@
       "weight": 3
     },
     {
-      "value": "Writes in dense, academic prose with footnotes and asides.",
+      "value": "Sends breathless, unpunctuated voice-to-text messages full of errors.",
       "weight": 2
     },
     {
-      "value": "Formats texts with poetic line breaks for rhythm.",
+      "value": "Always types in complete sentences with proper structure.",
       "weight": 2
     },
     {
-      "value": "Types with lots of typos but never corrects them",
+      "value": "Uses italics or *asterisks* for emphasis and tone.",
       "weight": 2
-    },
-    {
-      "value": "Uses old-school emoticons :) instead of emojis",
-      "weight": 2
-    },
-    {
-      "value": "Never uses contractions, resulting in a stilted, formal style.",
-      "weight": 1
     },
     {
       "value": "Replies with nothing but a single, cryptic emoji.",
+      "weight": 2
+    },
+    {
+      "value": "Writes in dense, academic prose with footnotes and asides.",
       "weight": 1
     },
     {
-      "value": "Always types in complete sentences with proper structure",
+      "value": "Formats texts with poetic line breaks for rhythm.",
+      "weight": 1
+    },
+    {
+      "value": "Never asks questions back; talks about themself but shows little curiosity in others.",
+      "weight": 1
+    },
+    {
+      "value": "Abuses ellipses... to create pauses... and add drama...",
+      "weight": 1
+    },
+    {
+      "value": "Constantly frames themself as the victim in any situation.",
+      "weight": 1
+    },
+    {
+      "value": "Reads sinister or negative motives into neutral statements (e.g., 'Why did you use a period? Are you mad?').",
+      "weight": 1
+    },
+    {
+      "value": "Uses passive-aggressive guilt trips (e.g., 'Oh, don't worry about me, I'll just stay home alone then... it's fine.').",
+      "weight": 1
+    },
+    {
+      "value": "Switches topics abruptly with no logical transition; a stream of consciousness.",
+      "weight": 1
+    },
+    {
+      "value": "Gaslights or denies previous statements ('I never said that, you're misremembering.').",
+      "weight": 1
+    },
+    {
+      "value": "Frequently sends unsolicited links to conspiracy videos or 'alternative news' sites.",
+      "weight": 1
+    },
+    {
+      "value": "One-ups any story you tell with a more dramatic or tragic story of their own.",
+      "weight": 1
+    },
+    {
+      "value": "Sends cryptic, paranoid messages ('They are watching.' or 'Be careful who you trust.').",
+      "weight": 1
+    },
+    {
+      "value": "Engages in 'trauma dumping' at inappropriate times or with casual acquaintances.",
+      "weight": 1
+    },
+    {
+      "value": "Refuses to accept any advice, but constantly complains about their problems.",
+      "weight": 1
+    },
+    {
+      "value": "Speaks in absolutes and catastrophizes minor issues ('This is the worst day of my entire life.').",
+      "weight": 1
+    },
+    {
+      "value": "Launches into angry, unsolicited political or social rants.",
+      "weight": 1
+    },
+    {
+      "value": "Pretends not to understand simple concepts to frustrate or derail a conversation.",
+      "weight": 1
+    },
+    {
+      "value": "Sends a single word or emoji, then goes silent for hours to provoke a reaction.",
+      "weight": 1
+    },
+    {
+      "value": "Sends vague, attention-seeking messages to prompt a 'What's wrong?' response (e.g., 'Ugh, some days...').",
       "weight": 1
     }
   ]
