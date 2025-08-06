@@ -18,9 +18,9 @@ from huggingface_hub import AsyncInferenceClient
 from pydantic import BaseModel
 
 # --- Configuration ---
-TARGET_N = 4750    # Target number of unique personas to generate
-MODEL_NAME = "zai-org/GLM-4.5-Air-FP8"  #  "zai-org/GLM-4.5-Air-FP8"  # "moonshotai/Kimi-K2-Instruct" # Or any other compatible model
-CONCURRENCY = 15      # Max number of parallel requests.
+TARGET_N = 5000    # Target number of unique personas to generate
+MODEL_NAME = "Qwen/Qwen3-235B-A22B-Instruct-2507"  #  "zai-org/GLM-4.5-Air-FP8"  # "moonshotai/Kimi-K2-Instruct" # Or any other compatible model
+CONCURRENCY = 20      # Max number of parallel requests.
 CHECKPOINT_EVERY = 50  # Save progress to the file after this many successful generations.
 RESET_EVERY = 50      # Reset to seed personas every X generations to prevent drift.
 NUM_REFERENCES = 3    # Number of seed personas to use as references for each generation
@@ -92,10 +92,9 @@ def generate_random_name():
     return f"{first_name} {last_name}"
 
 def weighted_choice(component_list):
-    """Selects one item from a list of {'value': ..., 'weight': ...} objects."""
-    values = [item['value'] for item in component_list]
+    """Selects one dictionary item from a list of {'value': ..., 'weight': ...} objects."""
     weights = [item['weight'] for item in component_list]
-    return random.choices(values, weights=weights, k=1)[0]
+    return random.choices(component_list, weights=weights, k=1)[0]
 
 def weighted_sample(component_list, k):
     """Selects k unique items from a list of weighted objects."""
@@ -117,32 +116,45 @@ async def generate_one_persona(
     """Generates a single new persona using the LLM."""
     async with semaphore:
         try:
-            # Prepare the prompt with random components
-            profession = weighted_choice(components['professions'])
-            life_context = weighted_choice(components['life_contexts'])
-            num_traits = 6
-            selected_traits = list(set(weighted_sample(components['traits'], k=num_traits)))
-            chat_quirk = weighted_choice(components['chatting_quirks'])
-            age = random.randint(19, 75)
+            # --- Tactic 1: Constrain inputs before the prompt ---
+            # 1. Pick the profession FIRST. This returns the full dictionary.
+            profession_data = weighted_choice(components['professions'])
+            profession = profession_data['value'] # Extract the string value
 
+            # 2. Determine the valid age range based on the profession's metadata
+            min_age_for_job = profession_data.get('min_age', 19)
+            max_age_for_job = profession_data.get('max_age', 75)
+            age = random.randint(min_age_for_job, max_age_for_job)
+
+            # 3. Select other components and immediately extract their 'value'
+            # This is the key change to fix the logic for these variables.
+            life_context = weighted_choice(components['life_contexts'])['value']
+            chat_quirk = weighted_choice(components['chatting_quirks'])['value']
+
+            num_traits = 6
+            # weighted_sample already returns a list of strings, so it's fine.
+            selected_traits = list(set(weighted_sample(components['traits'], k=num_traits)))
+
+
+            # --- Tactic 2: Use an improved prompt to force reconciliation ---
             instruction = (
-                "Here are some examples of personas we have already generated. AVOID repeating their themes:\n"
+                "Here are some examples of personas we have already generated. AVOID repeating their themes or being too similar:\n"
                 + "\n".join([json.dumps(p, ensure_ascii=False) for p in reference_personas]) +
                 f"\n\n---\n"
-                f"Your task is to generate a NEW, unique persona by creatively combining the following random elements. Create a believable, specific character who embodies all these aspects. Do not just list the components; weave them into a coherent story.\n\n"
-                f"**BUILDING BLOCKS TO COMBINE:**\n"
+                f"Your task is to generate a NEW, unique, and believable persona. You must creatively synthesize the following building blocks into a single, coherent character. Don't just list the components; make them feel like a real person.\n\n"
+                f"**BUILDING BLOCKS TO SYNTHESIZE:**\n"
                 f"- **Profession:** {profession}\n"
+                f"- **Core Demographics:** They are {age} years old.\n"
                 f"- **Life Context:** They are currently {life_context}.\n"
-                f"- **Core Character Traits:** Should reflect: {', '.join(selected_traits)}.\n"
-                f"- **Chat Style Inspiration:** Their style is inspired by this quirk: \"{chat_quirk}\"\n"
-                f"- **Target Age:** The persona must be {age} years old, unless completely unreaonable given their profession, in which case you can choose an age yourself.\n\n"
+                f"- **Personality Profile:** Their character should reflect these traits: {', '.join(selected_traits)}.\n"
+                f"- **Chat Style Challenge:** Their base communication style is: \"{chat_quirk}\"\n\n"
                 f"---"
                 f"**JSON OUTPUT TASK:**\n"
                 f"Create a single JSON object for a persona named '{generate_random_name()}'. "
                 f"Follow these rules for the JSON fields:\n"
-                f"- **traits:** Choose 3-6 adjectives from the list above that best fit the final character you imagined.\n"
-                f"- **background:** A short, specific 1-2 sentence story (≤300 chars) that integrates the profession, context, and age.\n"
-                f"- **chatting_style:** A brief description (≤120 chars) of their texting style, directly inspired by the quirk but improved as needed.\n"
+                f"- **traits:** Choose 3-6 adjectives from the list above that best fit the final, integrated character you imagined.\n"
+                f"- **background:** A short, specific 1-2 sentence story (≤300 chars) that **synthesizes** the profession, age, and life context into a believable narrative.\n"
+                f"- **chatting_style:** A brief description (≤120 chars) of their texting style. **Crucially, explain HOW a {age}-year-old {profession} would adapt or interpret the '{chat_quirk}'**. For example, would they use it ironically, incorrectly, or perfectly? Make it fit their character.\n"
                 f"The final output must be only the strict JSON object, with no extra text."
             )
 
@@ -163,6 +175,7 @@ async def generate_one_persona(
             return Persona(**persona_data)
 
         except Exception as e:
+            # This is where your error was being printed.
             print(f"⚠️ Error generating a persona: {e}. Retrying with another task.")
             await asyncio.sleep(2) # Prevent rapid-fire failures
             return None

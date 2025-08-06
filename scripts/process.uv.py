@@ -13,7 +13,7 @@ import uuid
 # Define paths
 RAW_DATA_DIR = "data/raw"
 PROCESSED_DATA_DIR = "data/processed"
-WHITELIST = ["data_Kimi-K2-Instruct_1754323519.jsonl", "data_GLM-4.5-Air-FP8_1754324376.jsonl"]  # If not empty, only process files in this list
+WHITELIST = ["data_Qwen3-235B-A22B-Instruct-2507_1754475189.jsonl", "data_Qwen3-235B-A22B-Instruct-2507_1754475804.jsonl", "data_Qwen3-235B-A22B-Instruct-2507_1754481467.jsonl"]  # If not empty, only process files in this list
 
 def extract_model_name_from_filename(filename):
     """
